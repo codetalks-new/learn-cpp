@@ -1,0 +1,16 @@
+{
+  "files.associations": {
+    "*.wpy": "vue",
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript",
+    "*.html": "html",
+    "*.san": "san",
+    "*.har": "json",
+    "*.df": "dockerfile",
+    "*.h": "c",
+    "iostream": "cpp",
+    "ios": "cpp",
+    "memory": "cpp"
+  }
+}
