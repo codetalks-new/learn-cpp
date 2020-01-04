@@ -1,19 +1,29 @@
-#include <stdio.h>
+
+#include <gtest/gtest.h>
+#include <iostream>
+#include <string>
+using std::cout;
+using std::endl;
+using std::string;
 
 class Demo
 {
 public:
-  static void *callMethod(void *arg);
+  static int callMethod();
 };
 
-void *Demo::callMethod(void *arg)
+int Demo::callMethod()
 {
-  printf("CallMethod \n");
-  return NULL;
+  return 2020;
+}
+TEST(DemoTestSuite, DemoTestCase)
+{
+  EXPECT_EQ(2020, Demo::callMethod());
 }
 
-int main(int argc, char const *argv[])
+GTEST_API_ int main(int argc, char *argv[])
 {
-  Demo::callMethod(NULL);
-  return 0;
+  printf("Running main() from %s ", __FILE__);
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
