@@ -11,6 +11,7 @@
     "*.h": "c",
     "iostream": "cpp",
     "ios": "cpp",
-    "memory": "cpp"
+    "memory": "cpp",
+    "vector": "cpp"
   }
 }
