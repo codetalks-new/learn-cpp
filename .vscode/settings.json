@@ -12,6 +12,7 @@
     "iostream": "cpp",
     "ios": "cpp",
     "memory": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "__config": "cpp"
   }
 }
