@@ -35,6 +35,7 @@
     "prefix": "newgtestdemo",
     "body": [
       "#include <gtest/gtest.h>",
+      "#include <gtest/gmock.h>",
       "#include <iostream>",
       "#include <string>",
       "using std::cout;",
@@ -46,7 +47,7 @@
       "}",
       "GTEST_API_ int main(int argc, char  *argv[]){",
       "    printf(\"Running main() from %s\\n\", __FILE__);",
-      "    testing::InitGoogleTest(&argc,argv);",
+      "    testing::InitGoogleMock(&argc,argv);",
       "    return RUN_ALL_TESTS();",
       "}"
     ]
