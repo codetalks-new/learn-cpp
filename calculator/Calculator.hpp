@@ -1,8 +1,13 @@
 #pragma once
+
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include <queue>
+#include <sstream>
+#include <stack>
 #include <string>
 #include <vector>
+
 namespace calculator {
 using std::string;
 using std::vector;
@@ -66,4 +71,116 @@ int calc(const string input) {
   int result = _calc_expr_without_paretheses(expr);
   return result;
 }
+
+struct Token {
+  // // 字母 D 表示数值类型
+  char kind;
+  double value;
+  Token() : kind('D'), value(0) {}
+};
+
+static inline bool is_operator(char ch) {
+  return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+}
+
+static vector<Token> tokenize(string input) {
+  std::stringstream cin(input);
+  vector<Token> tokens;
+  bool leading = true;
+  while (cin) {
+    Token token;
+    char ch = cin.peek();
+    if (isdigit(ch)) {
+      cin >> token.value;
+      leading = false;
+    } else if (leading && (ch == '+' || ch == '-')) {
+      cin >> token.value;
+      leading = false;
+    } else {
+      cin >> ch;
+      if (isspace(ch)) {  // skip
+        continue;
+      }
+      token.kind = ch;
+      leading = (ch == '(' || is_operator(ch));
+    }
+    tokens.push_back(token);
+  }
+  return tokens;
+}
+
+static inline int op_priority(char ch) {
+  switch (ch) {
+    case '*':
+    case '/':
+      return 30;
+    case '+':
+    case '-':
+      return 20;
+    default:
+      return 0;
+  }
+}
+static bool is_integer(double num) {
+  return isfinite(num) && floor(num) == num;
+}
+
+static string fmt_double(double d) {
+  if (is_integer(d)) {
+    long num = static_cast<long>(d);
+    return std::to_string(num);
+  } else {
+    string str = std::to_string(d);
+    str.erase(str.find_last_not_of('0') + 1, string::npos);
+    return str;
+  }
+}
+
+string infix_to_postfix(string input) {
+  std::vector<string> output;
+  std::stack<char> operators;
+
+  vector<Token> tokens = tokenize(input);
+
+  for (Token& token : tokens) {
+    const char ch = token.kind;
+    if (is_operator(ch)) {
+      const int op_pri = op_priority(ch);
+      while (!operators.empty()) {
+        char prev_op = operators.top();
+        const int pre_op_pri = op_priority(prev_op);
+        if (pre_op_pri >= op_pri) {
+          output.push_back(string(1, prev_op));
+          operators.pop();
+        } else {
+          break;
+        }
+      }
+      operators.push(ch);
+    } else if (token.kind == 'D') {
+      output.push_back(fmt_double(token.value));
+    } else if (ch == '(') {
+      operators.push(ch);
+    } else if (ch == ')') {
+      char prev_op = operators.top();
+      while (prev_op != '(') {
+        output.push_back(string(1, prev_op));
+        operators.pop();
+        prev_op = operators.top();
+      }
+      operators.pop();
+    } else {
+      // skip
+    }
+  }
+
+  while (!operators.empty()) {
+    char ch = operators.top();
+    output.push_back(string(1, ch));
+    operators.pop();
+  }
+
+  return boost::join(output, " ");
+}
+
 }  // namespace calculator

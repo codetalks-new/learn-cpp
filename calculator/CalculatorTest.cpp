@@ -6,6 +6,7 @@
 
 // using testing::Eq;
 using calculator::calc;
+using calculator::infix_to_postfix;
 
 TEST(Calculator, BasicAdd) {
   EXPECT_EQ(calc("3 + 4"), 7);
@@ -43,6 +44,44 @@ TEST(Calculator, BasicFourArithmeticOperationWithNestedParetheses) {
   EXPECT_EQ(calc("2 * ( 3 + (6 - 2) * 2 ) / 2"), 11);
 }
 
+TEST(InfixToPostfix, BasicAddSub) {
+  EXPECT_EQ(infix_to_postfix("3+4"), "3 4 +");
+  EXPECT_EQ(infix_to_postfix("3+4-5"), "3 4 + 5 -");
+  EXPECT_EQ(infix_to_postfix("3+4-2+5"), "3 4 + 2 - 5 +");
+}
+
+TEST(InfixToPostfix, BasicFourArithmeticOps) {
+  EXPECT_EQ(infix_to_postfix("3+4*2"), "3 4 2 * +");
+  EXPECT_EQ(infix_to_postfix("3+2*5-6"), "3 2 5 * + 6 -");
+  EXPECT_EQ(infix_to_postfix("3*4-2*5"), "3 4 * 2 5 * -");
+  EXPECT_EQ(infix_to_postfix("3*4-2*6/3"), "3 4 * 2 6 * 3 / -");
+}
+
+TEST(InfixToPostfix, BasicFourArithmeticOpsWithParenthese) {
+  EXPECT_EQ(infix_to_postfix("(3+4)*2"), "3 4 + 2 *");
+  EXPECT_EQ(infix_to_postfix("(3+2)*(5-6)"), "3 2 + 5 6 - *");
+  EXPECT_EQ(infix_to_postfix("3*(4-2)*5"), "3 4 2 - * 5 *");
+  EXPECT_EQ(infix_to_postfix("3*(4-2)*6/3"), "3 4 2 - * 6 * 3 /");
+}
+
+TEST(InfixToPostfix, BasicFourArithmeticOpsWithNestedParenthese) {
+  EXPECT_EQ(infix_to_postfix("(2*(3-1)+1)*(2+1)"), "2 3 1 - * 1 + 2 1 + *");
+  EXPECT_EQ(infix_to_postfix("(1+3)*((1+4/2)*2-1)"),
+            "1 3 + 1 4 2 / + 2 * 1 - *");
+  EXPECT_EQ(infix_to_postfix("2*(3+(6-2)*2)/2"), "2 3 6 2 - 2 * + * 2 /");
+}
+
+TEST(InfixToPostfix, DoubleAddSub) {
+  EXPECT_EQ(infix_to_postfix("3.14+4.2"), "3.14 4.2 +");
+  EXPECT_EQ(infix_to_postfix("32+40-50"), "32 40 + 50 -");
+  EXPECT_EQ(infix_to_postfix("314+4.5-2.5+5.1"), "314 4.5 + 2.5 - 5.1 +");
+}
+
+TEST(InfixToPostfix, NegtiveNum) {
+  EXPECT_EQ(infix_to_postfix("-3.14+4.2"), "-3.14 4.2 +");
+  EXPECT_EQ(infix_to_postfix("-3.14+-4.2"), "-3.14 -4.2 +");
+  EXPECT_EQ(infix_to_postfix("(3+2)*(-5.1-6)"), "3 2 + -5.1 6 - *");
+}
 GTEST_API_ int main(int argc, char *argv[]) {
   printf("Running main() from %s\n", __FILE__);
   testing::InitGoogleMock(&argc, argv);
