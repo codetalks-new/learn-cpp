@@ -19,6 +19,8 @@
 #include <thread>
 #include <vector>
 
+#include "./stopwatch.hpp"
+
 using std::cout;
 using std::endl;
 using std::string;
@@ -29,27 +31,6 @@ using std::vector;
 namespace this_thread = std::this_thread;
 
 std::mutex cout_lock;
-
-class StopWatch {
-  struct timespec start_ts;
-  bool is_started;
-
- public:
-  void start() noexcept {
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &this->start_ts);
-    this->is_started = true;
-  }
-  long get_ns() const noexcept {
-    struct timespec end_ts;
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end_ts);
-    long s = end_ts.tv_sec - start_ts.tv_sec;
-    long ns = s * 1000000000L + end_ts.tv_nsec - start_ts.tv_nsec;
-    return ns;
-  }
-  double get_ms() const noexcept {
-    return get_ns() / 1000000.0;
-  }
-};
 
 // static std::atomic<long> counter{0};  // = 0;
 static long counter{0};  // = 0;
