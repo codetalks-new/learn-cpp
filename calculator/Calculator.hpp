@@ -183,4 +183,7 @@ string infix_to_postfix(string input) {
   return boost::join(output, " ");
 }
 
+double calc_v2(string input) {
+  return 0;
+}
 }  // namespace calculator

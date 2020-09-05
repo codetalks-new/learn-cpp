@@ -6,6 +6,7 @@
 
 // using testing::Eq;
 using calculator::calc;
+using calculator::calc_v2;
 using calculator::infix_to_postfix;
 
 TEST(Calculator, BasicAdd) {
@@ -82,6 +83,14 @@ TEST(InfixToPostfix, NegtiveNum) {
   EXPECT_EQ(infix_to_postfix("-3.14+-4.2"), "-3.14 -4.2 +");
   EXPECT_EQ(infix_to_postfix("(3+2)*(-5.1-6)"), "3 2 + -5.1 6 - *");
 }
+#define _STR(s) #s
+#define STR(s) _STR(s)
+#define EXP_B1 -3.14 + 4.2
+
+TEST(CalculatorV2, Basic) {
+  EXPECT_EQ(calc_v2(STR(EXP_B1)), (EXP_B1));
+}
+
 GTEST_API_ int main(int argc, char *argv[]) {
   printf("Running main() from %s\n", __FILE__);
   testing::InitGoogleMock(&argc, argv);

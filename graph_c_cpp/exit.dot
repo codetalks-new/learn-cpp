@@ -1,0 +1,25 @@
+digraph c11_when_program_exit{
+  graph[label="C11 程序退出过程图解",bgcolor="lightcyan"]
+  mainReturn [label="main函数返回",color=seagreen,penwidth=2]
+  exit [label="exit()",color=seagreen,penwidth=2]
+  _Exit [label="_Exit()deprecated",color=brown]
+  normalExit [label="销毁静态对象\n刷缓冲区\n 关 I/O",shape=box]
+  atexit [label="atexit()",color=seagreen,penwidth=2]
+  quick_exit [label="quick_exit()",color="orange"]
+  at_quick_exit [label="at_quick_exit()",color=orange]
+  abort [label="abort()",color=darkorange,penwidth=2]
+  end [label="程序结束",color=gray3,penwidth=2]
+
+
+  mainReturn ->  exit -> normalExit -> atexit -> end [color=seagreen4];
+  abort -> end[color=red];
+  atexit -> atexit[label="调用hooks",fontsize=11, fontcolor=gray38]
+  atexit -> abort[label="hook出错",color=red, fontsize=11,fontcolor=gray38];
+
+  quick_exit -> at_quick_exit -> end[color=orange];
+  at_quick_exit -> at_quick_exit[label="调用hooks",fontsize=11, fontcolor=gray38]
+  at_quick_exit -> abort[label="hook出错",color=red, fontsize=11,fontcolor=gray38];
+
+  _Exit -> end[color=brown];
+
+}
